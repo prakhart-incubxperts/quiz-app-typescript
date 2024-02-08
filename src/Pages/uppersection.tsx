@@ -1,55 +1,57 @@
-import { Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import Backdrop from '@mui/material/Backdrop'
+import { FormControl, Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { isTopicExists, saveTopic } from '../APIManager/topicsApi';
+import { Topic } from '../Interface/model';
+import { topicStyle } from '../Assets/modalStyle';
 
 export function UpperSection() {
   const [open, setOpen] = useState(false);
-  const [type, setType] = useState<string>('');
-  const handleOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    height: 350,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 2,
-  };
-  function handleTopic() {
-    setType('newTopic')
-    setOpen(true);
-  }
+  const [data,setData]=useState<Topic>({TopicName:'',CreatedBy:'admin',CreatedAt:'',UpdatedAt:'',UpdatedBy:'admin',status:'True'}); 
 
+  useEffect(() => {
+  }, []);
+  
   function HandleCancel() {
     handleClose();
   }
 
-  function HandleSave() {
-    alert("Topic Added Successfully")
+  function handleChange(e:any){
+    console.log("topic name:",e.target.value);
+    setData({ ...data, [e.target.name]: e.target.value })
+    
   }
 
-  function handleNewQuestion() {
-    setType('newQuestion')
-    setOpen(true);
+  async function HandleSave(e:any) {
+    if(data.TopicName!==null && data.TopicName!==""){
+      const res=await isTopicExists(data?.TopicName);
+      if(res.data!==0){
+        const res= await saveTopic(data);
+       if(res?.status===200){
+        alert("Topic Added Successfully");
+        handleClose();
+        localStorage.setItem("role",'admin');
+       }
+      }
+      else{
+        alert("Topic already exists");
+      }
+    }
+    else{
+        e.preventDefault();
+    }
   }
-
 
   return (
-    <div>
+    <div className='m-4'>
       <section className="jumbotron text-center">
         <div className="container">
-          <h2 className="jumbotron-heading"></h2>
-          <p className="lead text-muted">Challenge yourself...</p>
-          <button className="btn btn-primary my-2" onClick={handleTopic}>Add New Topic</button>&nbsp;
-          <button className="btn btn-primary my-2" onClick={handleNewQuestion}>Add New Questions</button>
+          <h5 className="jumbotron-heading">...</h5>
+          <p className="lead text-muted"></p>
         </div>
       </section>
       <Modal
@@ -58,38 +60,9 @@ export function UpperSection() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-
-          {type === 'newQuestion' ?
-            <Box>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                New Question
-              </Typography>
-              <InputLabel id="demo-simple-select-label">Topic</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-multiple-name"
-                value={""}
-                label="Age">
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Enter Question:
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <TextField
-                  required
-                  fullWidth
-                  id="outlined-required"
-                  label="Required"
-                  defaultValue=""
-                />
-              </Typography>
-            </Box> :
-            <Box>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Box sx={topicStyle} className="topicStyle">
+          <FormControl fullWidth>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
                 New Topic
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -98,14 +71,15 @@ export function UpperSection() {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 <TextField
                   required
+                  type='text'
+                  name='TopicName'
                   fullWidth
                   id="outlined-required"
                   label="Required"
                   defaultValue=""
+                  onChange={handleChange}
                 />
               </Typography>
-            </Box>}
-
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={6}>
               <Button variant="contained" color="error" fullWidth onClick={HandleCancel}>
@@ -113,14 +87,15 @@ export function UpperSection() {
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="contained" fullWidth onClick={HandleSave}>
+              <Button variant="contained" fullWidth type='submit' onClick={HandleSave}>
                 Save
               </Button>
             </Grid>
           </Grid>
+          </FormControl>
         </Box>
       </Modal>
     </div>
-
   )
 }
+ 
