@@ -28,3 +28,23 @@ export async function fetchData() {
       console.log("error:", error);
     }
   }
+
+  export async function isTopicNameExists(topic:string,id:any) {
+    try {
+      const response = await axios.get(`${url}/topics/getname`,{ params: { topic:topic,topicId: id } })
+      return response.data;
+    }
+    catch (error) {
+      console.log("error:", error);
+    }
+  }
+
+  export async function editTopic(topic:string,id:any) {
+    try {
+      const response = await axios.put(`${url}/topics/edit`,{ params: { topic:topic,topicId: id } })
+      return response.data;
+    }
+    catch (error) {
+      console.log("error:", error);
+    }
+  }

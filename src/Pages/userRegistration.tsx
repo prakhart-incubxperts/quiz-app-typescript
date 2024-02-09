@@ -9,7 +9,7 @@ export function UserRegistration() {
     const [data, setData] = useState<UserData>({ UserName: '', UserEmail: '', CreatedBy: '', CreatedAt: '', UpdatedBy: '', UpdatedAt: '', status: 'True' });
     const Navigate = useNavigate();
     const { state } = useLocation();
-    const Topicid = state?.tid;
+    const Topicid = state?.topicid;
     const topic = state?.topic;
     let isUser = false;
 
@@ -17,13 +17,14 @@ export function UserRegistration() {
     }, []);
 
     async function handleClick(e: any) {
+        debugger
         e.preventDefault()        
         setData({ ...data, CreatedBy: role })
         if (data?.UserEmail !== "" && data?.UserEmail !== undefined) {
             const name = data?.UserName;
             const userEmail = data?.UserEmail;
             const res =await getUserByEmail(userEmail);
-            if(res?.length==0){
+            if(res?.length===0){
                 isUser=true;
             }
             if (isUser) {
@@ -39,10 +40,10 @@ export function UserRegistration() {
 
     return (
         <div>
-        <div className="container p-3">
+        <div className="container p-3 ">
             <div className="mx-auto">
-                <div className="mx-auto col-md-6">
-                    <form className="form-control" onSubmit={handleClick}>
+                <div className="mx-auto col-md-6 shadow p-3 mb-5 bg-white rounded">
+                    <form className="form-control border-0" onSubmit={handleClick}>
                         <div className="text-center mb-4">
                             <h1 className="h3 mb-3 font-weight-normal">Register</h1>
                         </div>

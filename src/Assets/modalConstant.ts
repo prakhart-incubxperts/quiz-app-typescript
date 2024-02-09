@@ -21,7 +21,8 @@ export const style = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 1,
-    overflow: 'auto'
+    overflow: 'auto',
+    scroll:'auto'
   };
 
   export const style2 = {
@@ -37,13 +38,26 @@ export const style = {
     overflow: 'auto'
   };
 
+  export const result = {
+    position: 'relative',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    height: 140,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 1,
+    overflow: ''
+  };
+
   export const topicStyle = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    height: 350,
+    minHeight: 100,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 1,

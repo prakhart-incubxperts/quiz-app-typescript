@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Grid, IconButton, } from '@mui/material';
+import { IconButton, } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal'
 import {  deleteQuestion, getQuestionByQuesionId, getQuestionByTopicId } from "../APIManager/questionsApi";
 import { fetchData,  } from "../APIManager/topicsApi";
@@ -10,7 +9,6 @@ import { getTestAttempt, getTestRank, } from "../APIManager/testsApi";
 import {  getOptionByQuesionId, } from "../APIManager/optionsApi";
 import { OptionData, Question, QuestionData, RankData, Topic, TopicsData } from "../Interface/model";
 import DataTable, { TableColumn } from "react-data-table-component";
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -27,7 +25,7 @@ export function DashBoard() {
   const initialTopicData:Topic={ TopicName: '', CreatedBy: 'admin', CreatedAt: '', UpdatedAt: '', UpdatedBy: 'admin', status: 'True' };
   const [open, setOpen] = useState(false);
   const [type, setType] = useState('');
-  const [tid, setTid] = useState<number>();
+  const [topicid, setTopicid] = useState<number>();
   const role = localStorage.getItem('role');
   const Navigate = useNavigate();
   const [qData, setQData] = useState<QuestionData>(initialQuestionData);
@@ -42,6 +40,9 @@ export function DashBoard() {
   const [isbtn, setIsBtn] = useState<string>();
   const [rankTopic, setRankTopic] = useState<string>('');
   const [questionTopic, setQuestionTopic] = useState<string>('');
+  const [topicEdit,setTopicEdit] = useState<number>();
+  const [topicNameEdit,setTopicNameEdit] = useState<string>('');
+  const [topicEditButton,setTopicEditButton] = useState<string>('save');
   const handleOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
   let attemptsArray: any[] = [];
@@ -69,7 +70,7 @@ export function DashBoard() {
     setIsBtn("edit");
     setIsList("questions");
     setType(e.target.name);
-    setTid(Number(e.target.value));
+    setTopicid(Number(e.target.value));
     setQuestionTopic(e.target.name);
     const data = Number(e.target.value);
     fetchQuestion(data);
@@ -91,9 +92,9 @@ export function DashBoard() {
   }
 
   function handleOnClickStart(e: any) {
-    const tid = Number(e.target.value);
+    const topicid = Number(e.target.value);
     const topic = e.target.name;
-    Navigate('/user', { state: { tid, topic } });
+    Navigate('/user', { state: { topicid, topic } });
   }
 
   function handleOnClickQ(e: any) {
@@ -102,7 +103,7 @@ export function DashBoard() {
     setQData({ ...qData, TopicId: (Number(e.target.value)) })
     handleOpen();
     setType(e.target.name);
-    setTid(e.target.value);
+    setTopicid(e.target.value);
     debugger
   }
 
@@ -112,6 +113,9 @@ export function DashBoard() {
     setQData(initialQuestionData);
     setOptions(initialOptionData);
     setTopicData(initialTopicData);
+    setTopicNameEdit('');
+    setTopicEdit(0);
+    setTopicEditButton('save');
     handleClose();
   }
 
@@ -186,11 +190,11 @@ export function DashBoard() {
     handleOpen();
   }
 
-  async function handleDeleteQuestion(qid: number, tid: number) {
+  async function handleDeleteQuestion(qid: number, topicid: number) {
     setIsList("questions");
     const res = await deleteQuestion(qid);
     if (res?.status === 200) {
-      await fetchQuestion(tid);
+      await fetchQuestion(topicid);
       handleOpen();
     }
   }
@@ -213,27 +217,32 @@ export function DashBoard() {
     handleOpen();
   }
 
-  function handleEditTopic(e:any){
-
-    console.log("edit topic id:",e); 
+  function handleEditTopic(id:number,topicName:string){
+    setTopicEdit(id);
+    setTopicNameEdit(topicName);
+    setTopicEditButton('edit');
+    setIsTopic(true);
+    handleOpen();
+    
+    console.log("edit topic id:",id); 
   }
 
 console.log("tesetdata",testdata);
 
   return (
     <main role="main">
-      <div>
+      <div >
         <button className="btn btn-primary my-1 mx-1 position-absolute top-1 end-0" hidden={isDisable} disabled={isDisable} onClick={handleTopic}><AddIcon fontSize="medium"/> New Topic</button>
       </div>
-      <div className="album py-5 bg-light">
-        <div className="container">
+      <div className="album py-5 my-2 bg-light">
+        <div className="container mt-2">
           <div className="row">
             {topicArray?.length > 0 ? topicArray?.map(topicinfo => {
               return (
               <div className="col-md-4">
                 <div className="card mb-4 shadow p-2 mb-4 bg-white rounded bg-info-subtle bg-gradient">
                   <div className="d-flex bd-highlight mb-3 my-1">
-                      <h6 className="me-auto p-2 bd-highlight">{topicinfo?.TopicName}</h6>
+                      <h5 className="me-auto p-2 bd-highlight">{topicinfo?.TopicName}</h5>
                       <p className="card-text p-2 bd-highlight mx-1">Attempts: {topicinfo?.Attempts}</p>
                   </div>
                   <div className="card-body">
@@ -248,8 +257,8 @@ console.log("tesetdata",testdata);
                           : <button type="button" className="btn btn-sm btn-outline-success" name={topicinfo?.TopicName} value={topicinfo?.TopicId} onClick={handleOnClickStart}>Start</button>}
                       </div>
                       <div className="btn-group" hidden={isDisable}>
-                        <button className="btn btn-lg btn-outline p-2 bd-highlight" name={topicinfo?.TopicName} value={topicinfo?.TopicId} hidden={isDisable} disabled={isDisable} onClick={()=>handleEditTopic(topicinfo?.TopicId)}><EditIcon fontSize="medium" color="info"/></button>
-                        <button className="btn btn-lg btn-outline p-2 bd-highlight" hidden={isDisable} disabled={isDisable}><DeleteIcon fontSize="medium" color="inherit"/></button>
+                        <button className="btn btn-lg btn-outline p-2 bd-highlight" name={topicinfo?.TopicName} value={topicinfo?.TopicId} hidden={isDisable} disabled={isDisable} onClick={()=>handleEditTopic(topicinfo?.TopicId,topicinfo?.TopicName)}><EditIcon fontSize="medium" color="info"/></button>
+                        {/* <button className="btn btn-lg btn-outline p-2 bd-highlight" hidden={isDisable} disabled={isDisable}><DeleteIcon fontSize="medium" color="inherit"/></button> */}
                       </div>
                     </div>
                   </div>
@@ -266,31 +275,29 @@ console.log("tesetdata",testdata);
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        {isTopic ? <Box sx={topicStyle} className="topicStyle">{<TopicComponent parentFunction={fetchingTopicsdata} cancelFunction={HandleCancel} closeFunction={handleClose}/>}
+        {isTopic ? <Box sx={topicStyle}>{<TopicComponent topic={topicNameEdit} topicId={topicEdit} topicButton={topicEditButton} parentFunction={fetchingTopicsdata} cancelFunction={HandleCancel} closeFunction={handleClose}/>}
       </Box> :
         <Box sx={style1}>
           <Box className="d-flex bd-highlight mb-3">
-            <h4 id="modal-title" className="me-auto p-2 bd-highlight">My Title</h4>
-              <IconButton className="ms-auto p-2 bd-highlight" onClick={HandleCancel}>X</IconButton>
+            <h4 id="modal-title" className="me-auto p-2 bd-highlight text-capitalize">{isList}</h4>
+              <IconButton className="ms-auto p-2 bd-highlight"  onClick={HandleCancel}>x</IconButton>
           </Box>
             {isList === "questions" ? 
             <>
               <DataTable
-                subHeader={true}
-                subHeaderComponent={''}
                 columns={columns}
                 data={input}
                 pagination
                 highlightOnHover={true}
                 responsive={true}
               />
-              <Grid container className="d-flex justify-content-end" >
+              {/* <Grid container className="d-flex justify-content-end" >
                 <Grid item>
                   <Button variant="contained" color="error" onClick={HandleCancel}>
                     Cancel
                   </Button>
                 </Grid>
-              </Grid>
+              </Grid> */}
               </>
            : isList === "rank" ? 
               <>
@@ -300,7 +307,7 @@ console.log("tesetdata",testdata);
               </> 
           : isList === "addquestion" ? 
                 <>
-                  {<QuestionForm isbtn={isbtn} topic={type} topicId={tid} qData={qData} options={options} handleEditCancel={handleEditCancel} handleClose={handleClose} />}
+                  {<QuestionForm isbtn={isbtn} topic={type} topicId={topicid} qData={qData} options={options} handleEditCancel={handleEditCancel} handleClose={handleClose} />}
                 </> :
                 "No data Available"}
         </Box>

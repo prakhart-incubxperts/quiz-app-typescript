@@ -123,7 +123,7 @@ export function QuestionForm(props:any){
 
     return(
         <FormControl className="form-group col-md-6" fullWidth >
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+              <Typography id="modal-modal-title" className="fs-4" variant="h6" component="h2">
                 Question
               </Typography>
               <Typography sx={{ mt: 2 }} className="d-flex justify-content-around">
@@ -146,7 +146,7 @@ export function QuestionForm(props:any){
                 />
               </Typography>
               <Box className="row">
-                <Typography id="modal-modal-description" sx={{ mt: 1 }}>
+                <Typography id="modal-modal-description" sx={{ mt: 1 }} className="fw-bold">
                   Enter Question:
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 1 }}>
@@ -162,7 +162,7 @@ export function QuestionForm(props:any){
                     onChange={handleChange}
                   />
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }} className="fw-bold">
                   Select Status:
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 1 }}>
@@ -177,7 +177,7 @@ export function QuestionForm(props:any){
                     <MenuItem value={'Deactivated'}>Deactive</MenuItem>
                   </Select>
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }} className="col">
+                <Typography id="modal-modal-description" sx={{ mt: 2 }} className="col fw-bold">
                   Enter Options: (Check the box for right option)
                 </Typography>
                 <Typography className="row">
@@ -186,7 +186,7 @@ export function QuestionForm(props:any){
                     <TextField
                       className="col-md-6"
                       name="Option1"
-                      size="small"
+                      size="small" 
                       type="text"
                       required
                       id="outlined-required"
@@ -241,4 +241,4 @@ export function QuestionForm(props:any){
               </Grid>
             </FormControl>
     )
-}
+} 

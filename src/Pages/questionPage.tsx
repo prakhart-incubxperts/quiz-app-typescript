@@ -10,7 +10,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 //import { Done } from '@mui/icons-material';
 import { Box, Button, IconButton, Modal, } from '@mui/material';
 import  '../Assets/modalStyle';
-import { style2 } from '../Assets/modalConstant';
+import { result, style1, style2, } from '../Assets/modalConstant';
 
 export function QuestionPage() {
 
@@ -28,7 +28,7 @@ export function QuestionPage() {
     const [isOpen,setIsOpen]=useState<boolean>(false);
     const [ischecked] = useState<boolean[]>([]);
     const [CorrectCount, setCorrectCount] = useState<number>(0);
-    const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(true);
     const [isNextDisable,setIsNextDisable] = useState<boolean>(true);
     const [buttonName,setButtonName]=useState<string>('Next');
     const [key,setKey] = useState<number>(0);
@@ -37,11 +37,10 @@ export function QuestionPage() {
     const Navigate = useNavigate();
     let questionIdArray: any[];
     
-
     useEffect(() => {
         setOptions([]);
     }, []);
-
+    
     async function fetchingRandomQuestions() {
         const topicsId = state?.Topicid;
         const res = await getQuestion(topicsId);
@@ -67,7 +66,7 @@ export function QuestionPage() {
     }
 
     async function nextQuestion() {
-        setKey(15);
+        setKey(key+0.5);
         if (optionClicked) {
             //setIsDisable(true);
         }
@@ -177,8 +176,8 @@ export function QuestionPage() {
                         </div>
                         <div className="h-75 question bg-white p-3 border-bottom">
                             <div className="d-flex flex-row align-items-center question-title">
-                                <h4 className="text-danger">Q{num + 1}.</h4>
-                                <h5 className="mt-1 ml-1">{onlyQuestion !== undefined || onlyQuestion !== "" ? onlyQuestion[num] : "No question Available"}</h5>
+                                <h5 className="text-danger">Q{num + 1}.</h5>
+                                <h5 className="">{onlyQuestion !== undefined || onlyQuestion !== "" ? onlyQuestion[num] : "No question Available"}</h5>
                             </div>{num === 0 ?
                                 <div className="row g-4 my-1">
                                     <div className="col-6">
@@ -211,7 +210,7 @@ export function QuestionPage() {
                     onClose={handleModalClose}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description">
-                    <Box sx={style2}><><IconButton className="position-absolute top-0.05 start-99 translate-middle" onClick={handleModalClose}>X</IconButton></>
+                    <Box sx={result}><><IconButton className="bd-highlight position-absolute top-0 end-0" size='small' onClick={handleModalClose}>X</IconButton></>
                         <div className="justify-content-center">
                             <div className="row justify-content-center">
                                 <div className="col-sm-6"></div> <div className="col-sm-6"><h4>{reqBody?.topic}</h4></div>  <div className="col-sm-6"></div>
@@ -221,13 +220,13 @@ export function QuestionPage() {
                             </div>
                             <div className="row justify-content-center">
                                 <div className="col-sm-3">
-                                    Total Questions
+                                    <h6>Total Questions</h6>
                                 </div>
                                 <div className="col-sm-3">
-                                    Attempted
+                                    <h6>Attempted</h6>
                                 </div>
                                 <div className="col-sm-3">
-                                    Correct
+                                <h6>Correct</h6>
                                 </div>
                             </div>
                             <div className="row justify-content-center">
@@ -241,9 +240,6 @@ export function QuestionPage() {
                                     {CorrectCount}
                                 </div>
                             </div>
-                            <Button variant="contained" size='small' color="error" className="position-absolute bottom-0 end-0" onClick={handleModalClose}>
-                                OK
-                            </Button>
                         </div>
                     </Box>
                 </Modal>:''}

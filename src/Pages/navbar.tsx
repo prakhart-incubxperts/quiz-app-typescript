@@ -9,7 +9,7 @@ import {  useState } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PersonIcon from '@mui/icons-material/Person';
-import { style, topicStyle } from '../Assets/modalConstant';
+import { topicStyle } from '../Assets/modalConstant';
 
 
 
@@ -99,7 +99,7 @@ export function Navbar() {
                 onChange={handleChangeAdminDetail}
               />
             </Typography>
-            <Grid container spacing={2} sx={{ mt: 14 }}>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={6}>
                 <Button variant="contained" color="error" fullWidth onClick={handleClose}>
                   Cancel
