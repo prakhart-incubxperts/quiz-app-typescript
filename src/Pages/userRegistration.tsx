@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getUserByEmail, saveUser } from "../APIManager/userApi";
+import { findorCreateUser, getUserByEmail, saveUser } from "../APIManager/userApi";
 import { UserData } from "../Interface/model";
 
 export function UserRegistration() {
@@ -23,13 +23,16 @@ export function UserRegistration() {
         if (data?.UserEmail !== "" && data?.UserEmail !== undefined) {
             const name = data?.UserName;
             const userEmail = data?.UserEmail;
-            const res =await getUserByEmail(userEmail);
-            if(res?.length===0){
-                isUser=true;
-            }
-            if (isUser) {
-                 await saveUser(data);
-            }           
+            const res=await findorCreateUser(data);
+            console.log("response from user:",res);
+            
+            // const res =await getUserByEmail(userEmail);
+            // if(res?.length===0){
+            //     isUser=true;
+            // }
+            // if (isUser) {
+            //      await saveUser(data);
+            // }           
             Navigate("/test", { state: { Topicid, topic, name, userEmail } });
         } 
     }
