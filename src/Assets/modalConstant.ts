@@ -18,6 +18,8 @@ export const style = {
     transform: 'translate(-50%, -50%)',
     width: 'fit-content',
     height: 'auto',
+    minHeight:'auto',
+    maxHeight:'99%',
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 1,

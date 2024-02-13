@@ -66,6 +66,7 @@ export function QuestionForm(props:any){
           setOptionsData({ ...optionsData, QuestionId: questionData.QuestionId });
           const res = await EditQuestion(questionData);
           const optionRes = await editOption(optionsData);
+          console.log("edit ques res:",res,optionRes);
           if (res?.status === 200 && optionRes?.status === 200) {
             alert("Question changed Successfully");
             setQuestionData(initialQuestionData)
@@ -82,6 +83,7 @@ export function QuestionForm(props:any){
       }
 
       async function HandleSave(e: any) {
+        debugger
         let isQuestion;
         let detail = { tid: questionData.TopicId, question: questionData.QuestionDescription }
         const res = await getQuestionByDescription(detail);
@@ -92,18 +94,20 @@ export function QuestionForm(props:any){
           if (isQuestion && ((optionsData?.Option1).toLowerCase() !== (optionsData?.Option2).toLowerCase() || (optionsData?.Option3).toLowerCase() || (optionsData?.Option4).toLowerCase()) && 
           ((optionsData?.Option2).toLowerCase() !== (optionsData?.Option3).toLowerCase() || (optionsData?.Option4).toLowerCase()) && ((optionsData?.Option3).toLowerCase() !== (optionsData?.Option4).toLowerCase())) {
             const res = await saveQuestion(questionData);
-            if (res?.status === 200) {
-              let body = { tid: questionData.TopicId, question: questionData.QuestionDescription }
-              const idResponse = await getQuestionByDescription(body);
-              if (idResponse?.status === 200) {
-                const resSave = await saveOptions({ ...optionsData, QuestionId: idResponse?.data[0]?.QuestionId });
+            console.log("res saveques:",res);
+            console.log("res saveques:",res?.data.response);
+            if (res?.data.response > 0) {
+              // let body = { tid: questionData.TopicId, question: questionData.QuestionDescription }
+              // const idResponse = await getQuestionByDescription(body);
+              console.log("res.data",res?.data);
+              
+              const resSave = await saveOptions({ ...optionsData, QuestionId: Number(res?.data.response) });
                 if (resSave?.status === 200) {
                   alert("Question Added Successfully");
                   setIsClicked(false);
                   setVal(0);
                   props?.handleClose();
                 }
-              }
             }
           }
           else {

@@ -46,7 +46,7 @@ export function DashBoard() {
   const handleOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
   let attemptsArray: any[] = [];
-
+  
   useEffect(() => {
     fetchingTopicsdata();
     if (role !== "admin") {
@@ -66,6 +66,8 @@ export function DashBoard() {
     }
   }
 
+  console.log("topics array:",topicArray);
+  
   async function handleOnClickList(e: any) {
     setIsBtn("edit");
     setIsList("questions");

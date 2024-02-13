@@ -46,7 +46,9 @@ export function TopicComponent(props:any){
           
           if (res.length === 0) {
             const res = await editTopic(topicData.TopicName,props?.topicId);
-            if (res === "") {
+            console.log("edittopic res:",res);
+            
+            if (res[0] === 1) {
               alert("Topic changed Successfully");
               //handleClose();
               props?.closeFunction();

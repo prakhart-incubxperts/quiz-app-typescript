@@ -47,7 +47,7 @@ export async function deleteQuestion(data: any) {
 
 export async function getQuestionByQuesionId(data: any) {
   try {
-    return await axios.get(`${url}/question/qid`, { params: { tid: data } })
+    return await axios.get(`${url}/question/qid`, { params: { qid: data } })
   } catch (error) {
     console.log("error:", error);
   }
