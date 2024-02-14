@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal'
 import {  deleteQuestion, getQuestionByQuesionId, getQuestionByTopicId } from "../APIManager/questionsApi";
 import { fetchData,  } from "../APIManager/topicsApi";
 import { getTestAttempt, getTestRank, } from "../APIManager/testsApi";
-import {  getOptionByQuesionId, } from "../APIManager/optionsApi";
+import {  getOptionByQuestionId, } from "../APIManager/optionsApi";
 import { OptionData, Question, QuestionData, RankData, Topic, TopicsData } from "../Interface/model";
 import DataTable, { TableColumn } from "react-data-table-component";
 import EditIcon from '@mui/icons-material/Edit';
@@ -204,7 +204,7 @@ export function DashBoard() {
   async function fetchQuestionById(qid: number) {
     const res = await getQuestionByQuesionId(qid);
     setQData(res?.data[0]);
-    const rs = await getOptionByQuesionId(qid);
+    const rs = await getOptionByQuestionId(qid);
     setOptions(rs?.data[0]);
   }
 

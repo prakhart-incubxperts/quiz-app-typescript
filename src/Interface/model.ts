@@ -25,6 +25,7 @@ export interface QuestionData {
   export interface UserData {
     UserName: string,
     UserEmail:string,
+    Password:string,
     CreatedBy:string,
     CreatedAt:string,
     UpdatedBy:string,
@@ -78,7 +79,7 @@ export interface QuestionData {
     status:string|any,
     QuestionId:number|any,
     TopicId:number|any,
-    UserMail:string|any
+    UserEmail:string|any
   }
   
   export interface RankData{

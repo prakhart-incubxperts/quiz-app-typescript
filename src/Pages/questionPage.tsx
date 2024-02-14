@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import '../Assets/CSS/test.css';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { getQuestion, } from '../APIManager/questionsApi';
-import { getOptionsByQuesionId, } from '../APIManager/optionsApi';
+import { getCorrectOption, getOptionsByQuestionId, } from '../APIManager/optionsApi';
 import { saveTest} from '../APIManager/testsApi';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { QuestionData, TestData } from '../Interface/model';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import CheckSharpIcon from '@mui/icons-material/CheckSharp';
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 //import { Done } from '@mui/icons-material';
-import { Box, Button, IconButton, Modal, } from '@mui/material';
+import { Box, Button, Hidden, IconButton, Modal, } from '@mui/material';
 import  '../Assets/modalStyle';
 import { result, style1, style2, } from '../Assets/modalConstant';
 
@@ -21,7 +23,7 @@ export function QuestionPage() {
     const [isplay, setIsPlay] = useState<boolean>(true);
     const [num, setNum] = useState<number>(0);
     const [options, setOptions] = useState<any[]>([]);
-    const [testResponse, setTestResponse] = useState<TestData>({ QuestionId: 0, OptionId: 0, CorrectOption: 0, SelectedOption: 0, DifficultyLevel: 1, CreatedBy: reqBody?.name, CreatedAt: '', UpdatedBy: '', UpdatedAt: '', status: 'True', TopicId: reqBody?.topicsId, UserMail: reqBody?.userEmail });
+    const [testResponse, setTestResponse] = useState<TestData>({ QuestionId: 0, OptionId: 0, CorrectOption: 0, SelectedOption: 0, DifficultyLevel: 1, CreatedBy: state?.name, CreatedAt: '', UpdatedBy: '', UpdatedAt: '', status: 'True', TopicId: state?.Topicid, UserEmail: state?.userEmaill });
     const [optionClicked] = useState(false);
     const [optionResponse] = useState<any[]>([]);
     const [test] = useState<any[]>([]);
@@ -32,15 +34,23 @@ export function QuestionPage() {
     const [isNextDisable,setIsNextDisable] = useState<boolean>(true);
     const [buttonName,setButtonName]=useState<string>('Next');
     const [key,setKey] = useState<number>(0);
+    const [CorrectAnswer]= useState<number[]>([]);
     const handleOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
     const Navigate = useNavigate();
     let questionIdArray: any[];
     
     useEffect(() => {
+        start();
         setOptions([]);
     }, []);
     
+    function start(){
+        debugger
+        if(state?.userEmail===''|| state?.userEmail=== undefined){
+            Navigate('/user');
+        }
+    }
     async function fetchingRandomQuestions() {
         const topicsId = state?.Topicid;
         const res = await getQuestion(topicsId);
@@ -58,7 +68,8 @@ export function QuestionPage() {
     }
 
     async function fetchOption() {
-            const opRes = await getOptionsByQuesionId(questionIdArray);
+        debugger
+            const opRes = await getOptionsByQuestionId(questionIdArray);
             if (opRes?.status === 200) {
                 setOptions(opRes?.data);
                 setTestResponse({ ...testResponse, OptionId: options[num]?.OptionId });
@@ -73,15 +84,17 @@ export function QuestionPage() {
         if ((optionResponse[num]) === undefined || (optionResponse[num]) === "") {
             optionResponse.push(0);
             ischecked.push(false);
+            CorrectAnswer.push(0);    
         }
         if (num < onlyQuestion?.length) {
             if (num === (onlyQuestion.length - 1)) {
                 test.push(testResponse);
+                console.log("CorrectAnswer",CorrectAnswer); 
                 alert("Times up...");
                 setIsOpen(true);
                 const res = await saveTest(test); 
                 if(res?.status===400){
-                    alert("Something went wrong");
+                    alert(`Something went wrong ${res}`);
                 }
                 handleOpen();
                 setOptions([]);
@@ -104,18 +117,18 @@ export function QuestionPage() {
         return (
             <div className="row g-4">
                 <div className="col-6">
-                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption1" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 1 ? "bg-success" : Number(optionResponse[num]) !== 1 && options[num]?.CorrectOption === 1 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 1 ? true : Number(optionResponse[num]) !== 1 && options[num]?.CorrectOption === 1 && ischecked[num] === true ? true : false} disabled={ischecked[num]} value={1} onClick={handleradio} /> <span>{options[num]?.Option1}</span>
+                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption1" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 1 ? "bg-success" : Number(optionResponse[num]) !== 1 && CorrectAnswer[num] === 1 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 1 ? true : Number(optionResponse[num]) !== 1 && Number(CorrectAnswer[num]) === 1 && ischecked[num] === true ? true : false} disabled={ischecked[num]} value={1} onClick={handleradio} /> <span>{options[num]?.Option1}</span>
                     </label>
                 </div>
                 <div className="col-6">
-                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption2" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 2 ? "bg-success" : Number(optionResponse[num]) !== 2 && options[num]?.CorrectOption === 2 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 2 ? true : Number(optionResponse[num]) !== 2 && options[num]?.CorrectOption === 2 && ischecked[num] === true ? true : false} value={2} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option2}</span>
+                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption2" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 2 ? "bg-success" : Number(optionResponse[num]) !== 2 && CorrectAnswer[num] === 2 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 2 ? true : Number(optionResponse[num]) !== 2 && Number(CorrectAnswer[num]) === 2 && ischecked[num] === true ? true : false} value={2} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option2}</span>
                     </label>
                 </div><div className="col-6">
-                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption3" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 3 ? "bg-success" : Number(optionResponse[num]) !== 3 && options[num]?.CorrectOption === 3 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 3 ? true : Number(optionResponse[num]) !== 3 && options[num]?.CorrectOption === 3 && ischecked[num] === true ? true : false} value={3} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option3}</span>
+                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption3" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 3 ? "bg-success" : Number(optionResponse[num]) !== 3 && CorrectAnswer[num] === 3 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 3 ? true : Number(optionResponse[num]) !== 3 && Number(CorrectAnswer[num]) === 3 && ischecked[num] === true ? true : false} value={3} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option3}</span>
                     </label>
                 </div>
                 <div className="col-6">
-                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption4" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 4 ? "bg-success" : Number(optionResponse[num]) !== 4 && options[num]?.CorrectOption === 4 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 4 ? true : Number(optionResponse[num]) !== 4 && options[num]?.CorrectOption === 4 && ischecked[num] === true ? true : false} value={4} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option4}</span>
+                    <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption4" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 4 ? "bg-success" : Number(optionResponse[num]) !== 4 && CorrectAnswer[num] === 4 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 4 ? true : Number(optionResponse[num]) !== 4 && Number(CorrectAnswer[num]) === 4 && ischecked[num] === true ? true : false} value={4} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option4}</span>
                     </label>
                 </div>
             </div>
@@ -127,24 +140,28 @@ export function QuestionPage() {
         Navigate('/');
     }
 
-    function handleradio(e: any) {
+   async function handleradio(e: any) {
+        const correctOptionResponse=await getCorrectOption(e.target.id,e.target.value);
+        console.log("correctOptionResponse",correctOptionResponse);
         setIsNextDisable(false);
         let val = Number(e.target.value)
         if (optionResponse[num] === 0 || optionResponse[num] <= options?.length) {
             optionResponse[num] = (val);
             ischecked[num] = (true);
-            if (val === options[num]?.CorrectOption) {
+            CorrectAnswer[num]=Number(correctOptionResponse?.data.CorrectOption);
+            if (val === CorrectAnswer[num]) {
                 setCorrectCount(CorrectCount + 1);
             }
         }
         else {
             optionResponse.push(val);
             ischecked.push(true);
-            if (val === options[num]?.CorrectOption) {
+            CorrectAnswer.push(Number(correctOptionResponse?.data.CorrectOption))
+            if (val === CorrectAnswer[num]) {
                 setCorrectCount(CorrectCount + 1);
             }
         }
-        setTestResponse({ ...testResponse, SelectedOption: Number(e.target.value), OptionId: options[num]?.OptionId, CorrectOption: options[num]?.CorrectOption, QuestionId: quesArray[num].QuestionId, DifficultyLevel: quesArray[num].DifficultyLevel, UpdatedBy: quesArray[num].QuestionDescription, UserMail: reqBody.userEmail });
+        setTestResponse({ ...testResponse, SelectedOption: Number(e.target.value), OptionId: options[num]?.OptionId, CorrectOption: CorrectAnswer[num], QuestionId: quesArray[num].QuestionId, DifficultyLevel: quesArray[num].DifficultyLevel, UpdatedBy: quesArray[num].QuestionDescription, UserEmail: reqBody.userEmail });
         if (testResponse?.QuestionId !== 0)
             saveTestData();
     }
@@ -181,18 +198,22 @@ export function QuestionPage() {
                             </div>{num === 0 ?
                                 <div className="row g-4 my-1">
                                     <div className="col-6">
-                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption1" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 1 ? "bg-success" : Number(optionResponse[num]) !== 1 && options[num]?.CorrectOption === 1 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 1 ? true : Number(optionResponse[num]) !== 1 && options[num]?.CorrectOption === 1 && ischecked[num] === true ? true : false} disabled={ischecked[num]} value={1} onClick={handleradio} /> <span>{options[num]?.Option1}</span>
+                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption1" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 1 ? "bg-success" : Number(optionResponse[num]) !== 1 && CorrectAnswer[num] === 1 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 1 ? true : Number(optionResponse[num]) !== 1 && Number(CorrectAnswer[num]) === 1 && ischecked[num] === true ? true : false} disabled={ischecked[num]} value={1} onClick={handleradio} /> <span>{options[num]?.Option1}</span>
+                                        {/* {Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 1 ? <CheckSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===1}/> : Number(optionResponse[num]) !== 1 && CorrectAnswer[num] === 1 && ischecked[num] === true ? <CheckSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===1}/> : <ClearSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===1}/>} */}
                                         </label>
                                     </div>
                                     <div className="col-6">
-                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption2" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 2 ? "bg-success" : Number(optionResponse[num]) !== 2 && options[num]?.CorrectOption === 2 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 2 ? true : Number(optionResponse[num]) !== 2 && options[num]?.CorrectOption === 2 && ischecked[num] === true ? true : false} value={2} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option2}</span>
+                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption2" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 2 ? "bg-success" : Number(optionResponse[num]) !== 2 && CorrectAnswer[num] === 2 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 2 ? true : Number(optionResponse[num]) !== 2 && Number(CorrectAnswer[num]) === 2 && ischecked[num] === true ? true : false} value={2} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option2}</span>
+                                        {/* {Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 2 ? <CheckSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===2}/> : Number(optionResponse[num]) !== 2 && CorrectAnswer[num] === 2 && ischecked[num] === true ? <CheckSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===2}/> : <ClearSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===2}/>} */}
                                         </label>
                                     </div><div className="col-6">
-                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption3" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 3 ? "bg-success" : Number(optionResponse[num]) !== 3 && options[num]?.CorrectOption === 3 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 3 ? true : Number(optionResponse[num]) !== 3 && options[num]?.CorrectOption === 3 && ischecked[num] === true ? true : false} value={3} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option3}</span>
+                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption3" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 3 ? "bg-success" : Number(optionResponse[num]) !== 3 && CorrectAnswer[num] === 3 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 3 ? true : Number(optionResponse[num]) !== 3 && Number(CorrectAnswer[num]) === 3 && ischecked[num] === true ? true : false} value={3} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option3}</span>
+                                        {/* {Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 3 ? <CheckSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===3}/> : Number(optionResponse[num]) !== 3 && CorrectAnswer[num] === 3 && ischecked[num] === true ? <CheckSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===3}/> : <ClearSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===3}/>} */}
                                         </label>
                                     </div>
                                     <div className="col-6">
-                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption4" className={`form-control ${Number(optionResponse[num]) === options[num]?.CorrectOption && options[num]?.CorrectOption === 4 ? "bg-success" : Number(optionResponse[num]) !== 4 && options[num]?.CorrectOption === 4 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 4 ? true : Number(optionResponse[num]) !== 4 && options[num]?.CorrectOption === 4 && ischecked[num] === true ? true : false} value={4} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option4}</span>
+                                        <label className="radio"> <input type="radio" id={quesArray[num].QuestionId} name="SelectedOption4" className={`form-control ${Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 4 ? "bg-success" : Number(optionResponse[num]) !== 4 && CorrectAnswer[num] === 4 && ischecked[num] === true ? "bg-success" : "bg-danger"}`} checked={Number(optionResponse[num]) === 4 ? true : Number(optionResponse[num]) !== 4 && Number(CorrectAnswer[num]) === 4 && ischecked[num] === true ? true : false} value={4} disabled={ischecked[num]} onClick={handleradio} /> <span>{options[num]?.Option4}</span>
+                                        {/* {Number(optionResponse[num]) === CorrectAnswer[num] && CorrectAnswer[num] === 4 ? <CheckSharpIcon  aria-hidden={ischecked[num] && Number(optionResponse[num])===4}/> : Number(optionResponse[num]) !== 4 && CorrectAnswer[num] === 4 && ischecked[num] === true ? <CheckSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===4}/> : <ClearSharpIcon aria-hidden={ischecked[num] && Number(optionResponse[num])===4}/>} */}
                                         </label>
                                     </div>
                                 </div> : <>{loadComponent()}</>}

@@ -1,8 +1,10 @@
 import axios from "axios";
 import { url } from "../Utils/url";
 
-export async function getTestAttempt(data: any) {
+export async function getTestAttempt(data: number) {
     try {
+      console.log("typeof data",typeof(data),data);
+      
       return await axios.get(`${url}/test/attempt`, { params: { tid: data } })
     } catch (error) {
       console.log("error:", error);

@@ -6,7 +6,9 @@ import { UserData } from "../Interface/model";
 export function UserRegistration() {
     
     const role: string | any = localStorage.getItem('role');
-    const [data, setData] = useState<UserData>({ UserName: '', UserEmail: '', CreatedBy: '', CreatedAt: '', UpdatedBy: '', UpdatedAt: '', status: 'True' });
+    const [data, setData] = useState<UserData>({ UserName: '', UserEmail: '',Password:'', CreatedBy: '', CreatedAt: '', UpdatedBy: '', UpdatedAt: '', status: 'True' });
+    const [isDisable,setIsDisable]= useState<boolean>(false);
+    const [isLogin,setIsLogin] = useState<boolean>(false);
     const Navigate = useNavigate();
     const { state } = useLocation();
     const Topicid = state?.topicid;
@@ -24,15 +26,7 @@ export function UserRegistration() {
             const name = data?.UserName;
             const userEmail = data?.UserEmail;
             const res=await findorCreateUser(data);
-            console.log("response from user:",res);
-            
-            // const res =await getUserByEmail(userEmail);
-            // if(res?.length===0){
-            //     isUser=true;
-            // }
-            // if (isUser) {
-            //      await saveUser(data);
-            // }           
+            console.log("response from user:",res);           
             Navigate("/test", { state: { Topicid, topic, name, userEmail } });
         } 
     }
@@ -41,11 +35,25 @@ export function UserRegistration() {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
+    function handleLogin(e:any){
+        if(e.target.value==='newUser'){
+            setIsLogin(true);
+            setIsDisable(true);
+        }
+        else{
+            setIsDisable(true);
+        }
+    }
+
     return (
         <div>
         <div className="container p-3 ">
             <div className="mx-auto">
                 <div className="mx-auto col-md-6 shadow p-3 mb-5 bg-white rounded">
+                    <div>
+                        <button className="btn btn-lg btn-primary btn-block" value={'existing'} type="submit" onClick={handleLogin} disabled={isDisable}>Login</button>
+                        <button className="btn btn-lg btn-primary btn-block" value={'newUser'} type="submit" onClick={handleLogin} disabled={isDisable}>Sign-up</button>
+                    </div>
                     <form className="form-control border-0" onSubmit={handleClick}>
                         <div className="text-center mb-4">
                             <h1 className="h3 mb-3 font-weight-normal">Register</h1>
@@ -56,9 +64,15 @@ export function UserRegistration() {
                         <div className="form-label-group p-3">
                             <input type="email" name="UserEmail" className="form-control" pattern="[a-z0-9._%+\-]+@[a-z]+\.[a-z]{2,}$" onChange={handleOnChange} placeholder="Email" required /> 
                         </div>
+                        <div className="form-label-group p-3">
+                            <input type="password" name="Password" className="form-control" placeholder="Password" onChange={handleOnChange} required disabled={isLogin}/> 
+                        </div>
+                        <div className="form-label-group p-3">
+                            <input type="password" name="Password" className="form-control" placeholder="Confirm Password" onChange={handleOnChange} required ={isLogin}/> 
+                        </div>
                         <button className="btn btn-lg btn-primary btn-block" type="submit" >Start Test</button>
-                        <p className="mt-4 mb-3 text-muted text-center">{topic} Test consist of all levels of questions , each question is of 30 seconds</p>
-                        <p className="mt-3 mb-2 text-muted text-center"><h5>Attempted Questions can not be re-attempted</h5></p>
+                        {/* <p className="mt-4 mb-3 text-muted text-center">{topic} Test consist of all levels of questions , each question is of 30 seconds</p> */}
+                        {/* <p className="mt-3 mb-2 text-muted text-center"><h5>Attempted Questions can not be re-attempted</h5></p> */}
                     </form>
                 </div>
             </div>
