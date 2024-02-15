@@ -52,6 +52,7 @@ export function QuestionPage() {
         }
     }
     async function fetchingRandomQuestions() {
+        debugger
         const topicsId = state?.Topicid;
         const res = await getQuestion(topicsId);
         setQuesArray(res?.data);

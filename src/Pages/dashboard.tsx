@@ -94,8 +94,10 @@ export function DashBoard() {
   }
 
   function handleOnClickStart(e: any) {
+    debugger
     const topicid = Number(e.target.value);
     const topic = e.target.name;
+    console.log(e.target.value,e.target.name);
     Navigate('/user', { state: { topicid, topic } });
   }
 
@@ -247,7 +249,7 @@ console.log("tesetdata",testdata);
                       <h5 className="me-auto p-2 bd-highlight">{topicinfo?.TopicName}</h5>
                       <p className="card-text p-2 bd-highlight mx-1">Attempts: {topicinfo?.Attempts}</p>
                   </div>
-                  <div className="card-body">
+                  <div className="card-body ">
                   {/* <p className="dcard-text">{topic}</p> */}
                     <div className="d-flex justify-content-between">
                       <div className="btn-group">

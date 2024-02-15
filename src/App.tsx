@@ -6,6 +6,7 @@ import { Navbar } from './Pages/navbar';
 import { UpperSection } from './Pages/uppersection';
 import './App.css';
 import { DashBoard } from './Pages/dashboard';
+import { AccountPage } from './Pages/accountPage';
 
 function App() {
   //const[role,setRole]=useState<string>('');
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<DashBoard />}></Route>
           <Route path="/user" element={<UserRegistration />}></Route>
           <Route path="/test" element={<QuestionPage />}></Route>
+          <Route path="/account" element={<AccountPage/>}></Route>
         </Routes>
       </Router>
     </div>
