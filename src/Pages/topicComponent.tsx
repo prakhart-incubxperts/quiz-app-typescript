@@ -14,7 +14,7 @@ export function TopicComponent(props:any){
       }
 
       async function HandleTopicSave(e: any) {
-        if (topicData.TopicName !== null && topicData.TopicName !== "") {
+        if (topicData?.TopicName !== null && topicData?.TopicName !== "") {
           const res = await isTopicExists((topicData?.TopicName).toLowerCase());
           if (res[0]?.TopicId <= 1 || res[0]?.TopicId === undefined) {
             const res = await saveTopic(topicData);
@@ -40,12 +40,12 @@ export function TopicComponent(props:any){
 
       async function HandleTopicEdit(e: any) {
         debugger
-        if (topicData.TopicName !== null && topicData.TopicName !== "") {
-          const res = await isTopicNameExists(topicData.TopicName,props?.topicId);
+        if (topicData?.TopicName !== null && topicData?.TopicName !== "") {
+          const res = await isTopicNameExists(topicData?.TopicName,props?.topicId);
           console.log("response:",res);
           
           if (res.length === 0) {
-            const res = await editTopic(topicData.TopicName,props?.topicId);
+            const res = await editTopic(topicData?.TopicName,props?.topicId);
             console.log("edittopic res:",res);
             
             if (res[0] === 1) {
