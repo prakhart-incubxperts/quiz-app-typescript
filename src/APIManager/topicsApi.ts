@@ -2,6 +2,8 @@ import axios from "axios";
 import { url } from "../Utils/url";
 
 export async function fetchData() {
+  console.log("url:",url);
+  
     try {
         console.log("inside topic api"); 
           console.log("inside");
