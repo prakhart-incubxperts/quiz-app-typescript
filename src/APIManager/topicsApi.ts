@@ -3,8 +3,7 @@ import { url } from "../Utils/url";
 
 export async function fetchData() {
     try {
-      console.log("inside topic api");
-      
+      console.log("inside topic api"); 
       const response = await axios.get(`${url}/topics`)
       return response.data;
     }
