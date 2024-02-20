@@ -16,6 +16,8 @@ export function TopicComponent(props:any){
       async function HandleTopicSave(e: any) {
         if (topicData?.TopicName !== null && topicData?.TopicName !== "") {
           const res = await isTopicExists((topicData?.TopicName).toLowerCase());
+          console.log("res from topicexist",res);
+          
           if (res[0]?.TopicId <= 1 || res[0]?.TopicId === undefined) {
             const res = await saveTopic(topicData);
             if (res?.status === 200) {
