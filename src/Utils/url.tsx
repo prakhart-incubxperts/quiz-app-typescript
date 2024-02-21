@@ -1,1 +1,1 @@
-export const url="http://43.205.240.85:5000/api";
+export const url="http://13.233.106.78:5000/api";
