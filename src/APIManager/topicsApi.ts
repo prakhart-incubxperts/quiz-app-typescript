@@ -52,3 +52,4 @@ export async function fetchData() {
       console.log("error:", error);
     }
   }
+  export default {fetchData,isTopicExists,saveTopic,isTopicNameExists,editTopic}
