@@ -64,7 +64,7 @@ export function DashBoard() {
       for (let i = 0; i < array.length; i++) {
         res[i].Attempts = attemptsArray[i]?.Attempts;
       }
-      setTopicArray(res);
+      setTopicArray(res?.data);
     }
   }
 
