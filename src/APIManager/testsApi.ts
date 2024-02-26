@@ -4,8 +4,8 @@ import { url } from "../Utils/url";
 export async function getTestAttempt(data: number) {
     try {
       console.log("typeof data",typeof(data),data);
-      const res= await axios.get(`${url}/test/attempt`, { params: { tid: data }  })
-      return res;
+      const res= await axios.get(`${url}/test/attempt`, { params:{ tid: data } })
+      return res.data;
     } catch (error) {
       console.log("error:", error);
     }
