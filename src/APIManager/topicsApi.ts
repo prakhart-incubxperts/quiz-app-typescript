@@ -5,8 +5,7 @@ export async function fetchData() {
   console.log("url:",url);
   
     try {
-        console.log("inside topic api"); 
-          console.log("inside");
+        console.log("inside topic api");
       const response = await axios.get(`${url}/topics`)
       return response.data;
     }
