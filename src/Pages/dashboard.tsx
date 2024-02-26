@@ -65,11 +65,12 @@ export function DashBoard() {
       for (let i = 0; i < array.length; i++) {
         res[i].Attempts = attemptsArray[i]?.Attempts;
       }
-      setTopicArray(res);
+      // setTopicArray(res);
     }
+    setTopicArray(res);
   }
 
-  console.log("topics array:",topicArray);
+  console.log("topic array:",topicArray);
   
   async function handleOnClickList(e: any) {
     setIsBtn("edit");
