@@ -55,6 +55,7 @@ export function DashBoard() {
   }, []);
 
   async function fetchingTopicsdata() {
+    debugger
     const res = await fetchData();
     let array = ((res)?.map((q: { TopicId: any; }) => q.TopicId));
     const AttemptResponse = await fetchAttempts(array);
