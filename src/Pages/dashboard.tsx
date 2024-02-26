@@ -58,13 +58,14 @@ export function DashBoard() {
     debugger
     const res = await fetchData();
     console.log("res:",res);
+    console.log("res.data:",res?.data);
     let array = ((res)?.map((q: { TopicId: any; }) => q.TopicId));
     const AttemptResponse = await fetchAttempts(array);
     if (AttemptResponse === 200 && array?.length > 0) {
       for (let i = 0; i < array.length; i++) {
         res[i].Attempts = attemptsArray[i]?.Attempts;
       }
-      setTopicArray(res?.data);
+      setTopicArray(res);
     }
   }
 
