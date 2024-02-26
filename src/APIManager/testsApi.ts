@@ -6,7 +6,7 @@ export async function getTestAttempt(data: number) {
       console.log("typeof data",typeof(data),data);
       const res= await axios.get(`${url}/test/attempt`, { params:{ tid: data } });
       console.log("res from axios.get:",res);
-      return res.data;
+      return res;
     } catch (error) {
       console.log("error:", error);
     }
