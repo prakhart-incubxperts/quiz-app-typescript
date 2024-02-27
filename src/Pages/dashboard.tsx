@@ -250,8 +250,8 @@ console.log("tesetdata",testdata);
               <div className="col-md-4">
                 <div className="card mb-4 shadow p-2 mb-4 bg-white rounded bg-info-subtle bg-gradient">
                   <div className="d-flex bd-highlight mb-3 my-1">
-                      <h5 className="me-auto p-2 bd-highlight">{topicinfo?.TopicName}</h5>
-                      <p className="card-text p-2 bd-highlight mx-1">Attempts: {topicinfo?.Attempts}</p>
+                      <h5 className="me-auto p-2 bd-highlight text-capitalize">{topicinfo?.TopicName}</h5>
+                      <p className="card-text p-2 bd-highlight mx-1 text-capitalize">Attempts: {topicinfo?.Attempts}</p>
                   </div>
                   <div className="card-body ">
                   {/* <p className="dcard-text">{topic}</p> */}
