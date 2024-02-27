@@ -26,7 +26,11 @@ export async function fetchData() {
   
   export async function saveTopic(data: any) {
     try {
-    return await axios.post(`${url}/topics/add`, data);
+    return await axios.post(`${url}/topics/add`, data,{
+      headers: {
+        'Content-Type': 'application/json',
+      }
+      });
     } catch (error) {
       console.log("error:", error);
     }
