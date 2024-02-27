@@ -7,7 +7,6 @@ export async function getTestAttempt(data: number) {
       const res= await axios.get(`${url}/test/attempt`, { params:{ tid:data } });
       console.log("res from axios.get:",res);
       console.log("res:",res);
-      
       return res;
     } catch (error) {
       console.log("error:", error);

@@ -17,8 +17,9 @@ export function TopicComponent(props:any){
         if (topicData?.TopicName !== null && topicData?.TopicName !== "") {
           const res = await isTopicExists((topicData?.TopicName).toLowerCase());
           console.log("res from topicexist",res);
+          console.log("type of res from topic:",typeof(res));
           
-          if (res[0]?.TopicId <= 1 || res[0]?.TopicId === undefined) {
+          if (res.length < 1) {
             const res = await saveTopic(topicData);
             if (res?.status === 200) {
               alert("Topic Added Successfully");
