@@ -39,3 +39,11 @@ import { url } from "../Utils/url";
       console.log("error:", error);
     } 
   }
+
+  export async function loginUser(data: any) {
+    try {
+      return await axios.post(`${url}/users/login`, data);
+    } catch (error) {
+      console.log("error:", error);
+    } 
+  }

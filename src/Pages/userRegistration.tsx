@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { findorCreateUser, getUserByEmail, saveUser } from "../APIManager/userApi";
+import { findorCreateUser, getUserByEmail, loginUser, saveUser } from "../APIManager/userApi";
 import { UserData } from "../Interface/model";
 
 export function UserRegistration() {
@@ -74,6 +74,15 @@ export function UserRegistration() {
         }
     }
 
+    async function userLogin(){
+        const res=await loginUser(data);
+        Navigate('/account',{state:data});
+    }
+
+    function userSignup(){
+
+    }
+
     return (
         <div>
         <div className="container p-3 ">
@@ -99,7 +108,7 @@ export function UserRegistration() {
                             <Link to={''} onClick={handleForgotPassword} >Forgot Password?</Link>
                         </div>
                         <div className="form-label-group p-3">
-                        <button className="btn btn-lg btn-primary btn-block" type="submit" >{topic!==undefined?'Start Test':'Login'}</button>
+                        <button className="btn btn-lg btn-primary btn-block" type="submit" onClick={topic!==undefined?handleClick:isLogin?userLogin:userSignup} >{topic!==undefined?'Start Test':isLogin?'Login':'Sign-Up'}</button>
                         </div>
                         <div className="form-label-group p-2">
                         {isLogin?<p>Don't have an Account? <Link id="existing" onClick={handleLogin} to={''}>Signup</Link></p>:<p>Already have an Account? <Link id="newUser" to={''} onClick={handleLogin}>Login</Link></p>}
