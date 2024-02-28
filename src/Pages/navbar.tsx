@@ -73,7 +73,7 @@ export function Navbar() {
               Quiz Mania
             </Typography>
             <Button color='primary' variant="contained" type='button' name='admin' value="admin" onClick={handleToggle} href='/'><AdminPanelSettingsIcon name='admin' fontSize='small'/>Admin</Button>
-            <Button color='secondary' className='mx-2' variant="contained" type='button' name='user' value="user" onClick={handleToggle} href='/'><PersonIcon name='user' fontSize='small'/>User</Button>
+            <Button color='secondary' className='mx-2' variant="contained" type='button' name='user' value="user" onClick={handleToggle} href='/user'><PersonIcon name='user' fontSize='small'/>User</Button>
           </Toolbar>
         </AppBar>
       </Box>
