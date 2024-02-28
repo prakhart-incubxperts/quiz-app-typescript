@@ -99,7 +99,7 @@ export function UserRegistration() {
                             <Link to={''} onClick={handleForgotPassword} >Forgot Password?</Link>
                         </div>
                         <div className="form-label-group p-3">
-                        <button className="btn btn-lg btn-primary btn-block" type="submit" >Start Test</button>
+                        <button className="btn btn-lg btn-primary btn-block" type="submit" >{topic!==undefined?'Start Test':'Login'}</button>
                         </div>
                         <div className="form-label-group p-2">
                         {isLogin?<p>Don't have an Account? <Link id="existing" onClick={handleLogin} to={''}>Signup</Link></p>:<p>Already have an Account? <Link id="newUser" to={''} onClick={handleLogin}>Login</Link></p>}
