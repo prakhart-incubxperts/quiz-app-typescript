@@ -75,8 +75,17 @@ export function UserRegistration() {
     }
 
     async function userLogin(){
+        debugger
         const res=await loginUser(data);
-        Navigate('/account',{state:data});
+        console.log("res from login api:",res);
+        if(res?.data.users!==null){
+            localStorage.setItem('token',res?.data.token);
+            Navigate('/account',{state:res?.data.users});
+        }
+        else{
+            Navigate('/user');
+        }
+        
     }
 
     function userSignup(){
@@ -88,7 +97,7 @@ export function UserRegistration() {
         <div className="container p-3 ">
             <div className="mx-auto">
                 <div className="mx-auto col-md-6 shadow p-2 mb-5 bg-white rounded">
-                    <form className="form-control border-0" onSubmit={handleClick}>
+                    <form className="form-control border-0">
                         <div className="text-center mb-4">
                             <h1 className="h3 mb-3 font-weight-normal">{isLogin?'Login':'Sign-Up'}</h1>
                         </div>

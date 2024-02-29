@@ -42,8 +42,21 @@ import { url } from "../Utils/url";
 
   export async function loginUser(data: any) {
     try {
-      return await axios.post(`${url}/users/login`, data);
+      console.log("data inside loginuser:",data);
+      const res= await axios.post(`${url}/users/login`, {data});
+      console.log("res user login:",res);
+      return res;
     } catch (error) {
       console.log("error:", error);
     } 
   }
+
+  export async function checkUser(data: any) {
+    try {
+      return await axios.post(`${url}/users/account`, {data});
+    } catch (error) {
+      console.log("error:", error);
+    } 
+  }
+
+  

@@ -2,17 +2,25 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { useEffect } from 'react';
+import { checkUser } from '../APIManager/userApi';
+import { useNavigate } from 'react-router-dom';
 
 export function AccountPage(){
 
     const role = localStorage.getItem('role');
+    const Navigate=useNavigate();
+    const token=localStorage.getItem('token');
 
     useEffect(() => {
         fetchUserData()
       }, []);
 
-      function fetchUserData(){
-        
+      async function fetchUserData(){
+        debugger
+        const res=await checkUser(token);
+        if(res?.data.message!=='profile accessed'){
+          Navigate('/user');
+        }
       }
 
     return(

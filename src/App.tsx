@@ -7,6 +7,7 @@ import { UpperSection } from './Pages/uppersection';
 import './App.css';
 import { DashBoard } from './Pages/dashboard';
 import { AccountPage } from './Pages/accountPage';
+import { ProtectedRoutes } from './Pages/protectedRoutes';
 
 function App() {
   //const[role,setRole]=useState<string>('');
